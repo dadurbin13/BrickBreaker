@@ -58,11 +58,11 @@ void draw() {
 
 void initializeGame() {
   ballX = width / 2;
-  ballY = height / 2;
+  ballY = height - paddleHeight - 20;
   paddleX = width / 2 - paddleWidth / 2;
   brickWidth = width / cols;
   ballSpeedX = 6;
-  ballSpeedY = 6;
+  ballSpeedY = -6;
   gameOver = false;
   score = 0;
   lives = 3;
@@ -100,7 +100,7 @@ void moveBall() {
 
     // Reset ball position for the next life
     ballX = width / 2;
-    ballY = height / 2;
+    ballY = height - paddleHeight - 20;
     ballSpeedY = -abs(ballSpeedY); // Ensure the ball starts moving upwards
   }
   
