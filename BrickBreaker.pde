@@ -1,7 +1,8 @@
 // Global variables
 float ballX, ballY;
 float ballSpeedX = 6, ballSpeedY = 6;
-float paddleX, paddleWidth = 100, paddleHeight = 20;
+float paddleX, paddleSpeed = 10, paddleWidth = 100, paddleHeight = 20;
+boolean moveLeft = false, moveRight = false;
 
 String[] grid = {
   "OOOOOOOOOOOOOOOOOOOO",
@@ -130,8 +131,39 @@ void displayBall() {
 }
 
 void displayPaddle() {
-  paddleX = mouseX - paddleWidth / 2;
+  // Update paddle position based on key presses
+  if (moveLeft && paddleX > 0) {
+    paddleX -= paddleSpeed;
+  }
+  if (moveRight && paddleX < width - paddleWidth) {
+    paddleX += paddleSpeed;
+  }
+
   rect(paddleX, height - paddleHeight, paddleWidth, paddleHeight);
+}
+
+void keyPressed() {
+  if (key == CODED) {
+    if (keyCode == LEFT) {
+      moveLeft = true;
+    } else if (keyCode == RIGHT) {
+      moveRight = true;
+    }
+  }
+
+  if (gameOver && key == 'r') {
+    initializeGame();
+  }
+}
+
+void keyReleased() {
+  if (key == CODED) {
+    if (keyCode == LEFT) {
+      moveLeft = false;
+    } else if (keyCode == RIGHT) {
+      moveRight = false;
+    }
+  }
 }
 
 void displayBricks() {
@@ -160,10 +192,4 @@ void displayGameOver() {
   textSize(20);
   text("Score: " + score, width / 2 - 50, height / 2 + 40);
   text("Press 'R' to Restart", width / 2 - 75, height / 2 + 70);
-}
-
-void keyPressed() {
-  if (gameOver && key == 'r') {
-    initializeGame();
-  }
 }
