@@ -3,6 +3,7 @@ float ballX, ballY;
 float ballSpeedX = 6, ballSpeedY = 6;
 float paddleX, paddleSpeed = 10, paddleWidth = 100, paddleHeight = 20;
 boolean moveLeft = false, moveRight = false;
+boolean isPaused = false;
 
 String[] grid = {
   "OOOOOOOOOOOOOOOOOOOO",
@@ -45,16 +46,24 @@ void setup() {
 
 void draw() {
   if (!gameOver) {
+    if (!isPaused) {
+      moveBall();
+    }
+
     background(0);
-    moveBall();
     displayBall();
     displayPaddle();
     displayBricks();
     displayLivesAndScore();
+
+    if (isPaused) {
+      displayPauseScreen();
+    }
   } else {
     displayGameOver();
   }
 }
+
 
 void initializeGame() {
   ballX = width / 2;
@@ -143,18 +152,26 @@ void displayPaddle() {
 }
 
 void keyPressed() {
-  if (key == CODED) {
-    if (keyCode == LEFT) {
-      moveLeft = true;
-    } else if (keyCode == RIGHT) {
-      moveRight = true;
-    }
+  if (key == 'p' || key == 'P') {
+    isPaused = !isPaused; // Toggle pause state
   }
 
-  if (gameOver && key == 'r') {
-    initializeGame();
+  if (!isPaused) {
+    // Existing key control code
+    if (key == CODED) {
+      if (keyCode == LEFT) {
+        moveLeft = true;
+      } else if (keyCode == RIGHT) {
+        moveRight = true;
+      }
+    }
+
+    if (gameOver && key == 'r') {
+      initializeGame();
+    }
   }
 }
+
 
 void keyReleased() {
   if (key == CODED) {
@@ -192,4 +209,10 @@ void displayGameOver() {
   textSize(20);
   text("Score: " + score, width / 2 - 50, height / 2 + 40);
   text("Press 'R' to Restart", width / 2 - 75, height / 2 + 70);
+}
+
+void displayPauseScreen() {
+  textSize(40);
+  fill(255, 255, 255);
+  text("PAUSED", width / 2 - 70, height / 2);
 }
